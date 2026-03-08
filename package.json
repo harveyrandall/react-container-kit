@@ -1,6 +1,6 @@
 {
   "name": "unstated-next-lib",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "TypeScript utilities and helpers for unstated-next state management",
   "packageManager": "yarn@4.13.0",
   "main": "./dist/index.js",
