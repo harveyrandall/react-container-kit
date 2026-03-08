@@ -42,7 +42,7 @@ export function composeProviders(
   }
 
   ComposedProviders.displayName = `ComposedProviders(${providers
-    .map((p) => p.displayName ?? p.name ?? 'Unknown')
+    .map((p) => p.displayName || p.name || 'Unknown')
     .join(', ')})`;
 
   return ComposedProviders;
