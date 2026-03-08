@@ -22,7 +22,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:types": "vitest typecheck",
+    "test:types": "tsc --project tsconfig.types-test.json --noEmit",
     "test:coverage": "vitest run --coverage"
   },
   "peerDependencies": {

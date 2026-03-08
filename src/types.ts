@@ -11,16 +11,18 @@ import type { ComponentType, ReactNode } from 'react';
 export type ContainerValue<C> = C extends { useContainer: () => infer V } ? V : never;
 
 /**
- * Extracts the optional initialState type from a container's Provider.
+ * Extracts the initialState type from a container's Provider.
  *
  * @example
  * const ProfileContainer = createContainer(useProfile);
  * type ProfileState = ContainerState<typeof ProfileContainer>;
- * // -> User | undefined
+ * // -> User
  */
 export type ContainerState<C> =
-  C extends { Provider: ComponentType<{ initialState?: infer S; children: ReactNode }> }
-    ? S
+  C extends { Provider: ComponentType<infer P> }
+    ? P extends { initialState?: infer S }
+      ? S
+      : never
     : never;
 
 /**
