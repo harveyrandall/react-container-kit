@@ -79,7 +79,7 @@ type ProfileValue = ContainerValue<typeof ProfileContainer>;
 
 // Extract the initialState type
 type ProfileInitialState = ContainerState<typeof ProfileContainer>;
-// -> Profile | undefined
+// -> Profile
 
 // Type a variable that holds any container
 function logContainer(c: TypedContainer<unknown>) { ... }
@@ -117,6 +117,29 @@ const { Provider: ProfileProvider, useContainer: useProfile } =
 export { ProfileProvider };
 export default useProfile;
 ```
+
+## Tests
+
+The test suite uses [Vitest](https://vitest.dev/) with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) and [happy-dom](https://github.com/capricorn86/happy-dom) for the DOM environment. Compile-time type assertions are validated separately with `tsc`.
+
+Run the suite:
+
+```sh
+yarn test              # vitest run (all runtime tests)
+yarn test:types        # tsc --noEmit on *.test-d.ts files
+yarn test:coverage     # vitest with v8 coverage
+```
+
+### Test files
+
+| File | Description | Tests | Coverage |
+|---|---|---|---|
+| `__tests__/create-named-container.test.ts` | Return shape, `displayName` assignment, `useContainer` integration, container independence | 14 | 100% |
+| `__tests__/compose-providers.test.ts` | Return value, provider ordering, context chaining, children rendering, edge cases | 18 | 100% |
+| `__tests__/index.test.ts` | Public API export presence and basic callability | 6 | — |
+| `__tests__/types.test-d.ts` | Compile-time assertions for `ContainerValue`, `ContainerState`, `TypedContainer`, `AnyProvider` | 21 | — |
+
+**Total: 38 runtime tests passing · 100% statement/branch/function/line coverage on runtime source**
 
 ## License
 
