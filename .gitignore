@@ -2,3 +2,14 @@ node_modules/
 .yarn/cache/
 .yarn/install-state.gz
 dist/
+.claude/worktrees/
+.pnp.cjs
+.pnp.loader.mjs
+
+coverage/
+
+## LLMs
+.claude/
+
+## macOS files
+.DS_Store
