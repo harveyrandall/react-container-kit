@@ -11,5 +11,8 @@ coverage/
 ## LLMs
 .claude/
 
+## IDEs
+.vscode/
+
 ## macOS files
 .DS_Store
