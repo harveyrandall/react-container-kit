@@ -23,7 +23,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:types": "tsc --project tsconfig.types-test.json --noEmit",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "yarn build && yarn typecheck && yarn test && yarn test:types",
+    "release": "yarn npm publish"
   },
   "peerDependencies": {
     "react": ">=16.8.0",
