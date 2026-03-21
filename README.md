@@ -89,23 +89,85 @@ function logContainer(c: TypedContainer<unknown>) { ... }
 
 Based on real-world usage, the recommended pattern for a container module is:
 
+<!-- markdownlint-disable-next-line MD033 -->
+<details>
+  <!-- markdownlint-disable-next-line MD033 -->
+  <summary>See types defined for <code>User</code> example below.</summary>
+
+For the purposes of this example the types are deifind in one file shown below.
+
+In a production ready application these types would be defined `common`/`shared` folders and `Locale` would be in an `i18n` related file. The files don't _only_ relate to the `User` interfaceb but for the purposes of this example they do.
+
+```ts
+// src/core/types/user.ts
+
+export interface Media {
+  id?: string;
+  url: string;
+}
+
+export enum UserState {
+  DELETED = 'DELETED',
+  BLOCKED = 'BLOCKED',
+  INVITED = 'INVITED',
+  ACTIVE = 'ACTIVE',
+}
+
+export enum UserType {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+}
+
+export interface User {
+  id: string;
+  firstName?: string;
+  lastName?: string;
+  type: UserType;
+  state: UserState;
+  email: string;
+  phone?: string;
+  profilePicture?: Media;
+}
+```
+
+</details>
+
 ```ts
 // src/core/data/profile/index.ts
 import { useState } from 'react';
 import { createNamedContainer } from 'react-container-kit';
 import type { User } from 'core/types/user';
 
+export type ProfileDraft = Pick<User, 'firstName' | 'lastName' | 'phone' | 'language'>;
+
+const defaultUser: User = {
+  id: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  type: UserType.USER,
+  state: UserState.ACTIVE,
+};
+
 interface UseProfile {
   profile: User;
-  update: (draft: Partial<User>) => Promise<void>;
+  update: (draft: ProfileDraft) => Promise<void>;
 }
 
 function useProfileInternal(initialState?: User): UseProfile {
-  const [profile, setProfile] = useState<User>(initialState ?? defaultUser);
+  const [profile, setProfile] = useState<User>(initialState || defaultUser);
 
-  async function update(draft: Partial<User>) {
-    const updated = await patchProfile(draft);
-    setProfile(updated);
+  async function update(draft: ProfileDraft) {
+    try {
+      const res = await updateProfile(draft);
+      setProfile(res);
+      return res;
+    } catch (e) {
+      console.error(e);
+    }
+
+    return undefined;
   }
 
   return { profile, update };
