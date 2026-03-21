@@ -1,6 +1,6 @@
 {
   "name": "react-container-kit",
-  "version": "1.0.0",
+  "version": "0.3.1",
   "description": "TypeScript utilities for the React container pattern — named containers, provider composition, and type helpers",
   "packageManager": "yarn@4.13.0",
   "main": "./dist/index.js",
