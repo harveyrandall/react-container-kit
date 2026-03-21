@@ -48,7 +48,7 @@
     "commitizen": "^4.3.1",
     "conventional-changelog-cli": "^5.0.0",
     "cz-conventional-changelog": "^3.3.0",
-    "happy-dom": "^14.0.0",
+    "happy-dom": "^20.0.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "tsup": "^8.0.0",
