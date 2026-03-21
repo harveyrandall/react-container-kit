@@ -25,7 +25,8 @@
     "test:types": "tsc --project tsconfig.types-test.json --noEmit",
     "test:coverage": "vitest run --coverage",
     "prepublishOnly": "yarn build && yarn typecheck && yarn test && yarn test:types",
-    "release": "yarn npm publish",
+    "release": "bash scripts/release.sh",
+    "release:publish": "yarn npm publish",
     "release:remind": "bash scripts/release-reminder.sh",
     "commit": "cz",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
