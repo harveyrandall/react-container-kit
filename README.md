@@ -1,11 +1,11 @@
-# unstated-next-lib
+# react-container-kit
 
-TypeScript utilities and helpers for [`unstated-next`](https://github.com/jamiebuilds/unstated-next) state management.
+TypeScript utilities for the React container pattern — named containers, provider composition, and type helpers. Built on top of [`unstated-next`](https://github.com/jamiebuilds/unstated-next).
 
 ## Installation
 
 ```sh
-yarn add unstated-next-lib unstated-next react
+yarn add react-container-kit unstated-next react
 ```
 
 ## API
@@ -15,7 +15,7 @@ yarn add unstated-next-lib unstated-next react
 Re-exported directly from `unstated-next`. Create a container from a custom hook:
 
 ```ts
-import { createContainer } from 'unstated-next-lib';
+import { createContainer } from 'react-container-kit';
 
 interface Profile { firstName: string; lastName: string; }
 
@@ -34,7 +34,7 @@ export const useProfile = container.useContainer;
 Like `createContainer`, but sets a `displayName` on the Provider for better React DevTools readability. Without this, every container's provider shows as `"Provider"` in the component tree.
 
 ```ts
-import { createNamedContainer } from 'unstated-next-lib';
+import { createNamedContainer } from 'react-container-kit';
 
 const { Provider: ProfileProvider, useContainer: useProfile } =
   createNamedContainer('Profile', useProfileInternal);
@@ -46,7 +46,7 @@ const { Provider: ProfileProvider, useContainer: useProfile } =
 Composes multiple provider components into a single wrapper, eliminating deeply-nested JSX. Providers are applied outermost-first (left to right).
 
 ```tsx
-import { composeProviders } from 'unstated-next-lib';
+import { composeProviders } from 'react-container-kit';
 
 // Before — deeply nested:
 // <SnackbarProvider>
@@ -69,7 +69,7 @@ function App() {
 ### Type utilities
 
 ```ts
-import type { ContainerValue, ContainerState, TypedContainer } from 'unstated-next-lib';
+import type { ContainerValue, ContainerState, TypedContainer } from 'react-container-kit';
 
 const ProfileContainer = createContainer(useProfileInternal);
 
@@ -92,7 +92,7 @@ Based on real-world usage, the recommended pattern for a container module is:
 ```ts
 // src/core/data/profile/index.ts
 import { useState } from 'react';
-import { createNamedContainer } from 'unstated-next-lib';
+import { createNamedContainer } from 'react-container-kit';
 import type { User } from 'core/types/user';
 
 interface UseProfile {

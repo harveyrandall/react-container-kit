@@ -1,7 +1,7 @@
 {
-  "name": "unstated-next-lib",
+  "name": "react-container-kit",
   "version": "1.0.0",
-  "description": "TypeScript utilities and helpers for unstated-next state management",
+  "description": "TypeScript utilities for the React container pattern — named containers, provider composition, and type helpers",
   "packageManager": "yarn@4.13.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
