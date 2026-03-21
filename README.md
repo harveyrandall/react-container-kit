@@ -180,6 +180,50 @@ export { ProfileProvider };
 export default useProfile;
 ```
 
+## In depth - When and why to use this package
+
+### `createNamedContainer`
+
+React DevTools identifies components in the tree by their `displayName`. Without it, every container's provider renders as the generic label `"Provider"` — in an app with several containers, the component tree becomes a wall of identical entries that tells you nothing about which context is which.
+
+`createNamedContainer` is a drop-in replacement for `createContainer` that accepts a name as its first argument and uses it to label the provider in DevTools. Pass `'Profile'` and the provider appears as `"ProfileProvider"`, matching the naming convention used by libraries like React Router and React Query. The returned container is otherwise identical in shape: the same `{ Provider, useContainer }` pair, the same TypeScript generics, the same `initialState` support.
+
+The name also surfaces in error messages. When `useContainer` is called outside its provider, React includes the component name in the error, so `"ProfileProvider"` in the stack trace points you directly to the missing wrapper rather than leaving you to work out which of your many `"Provider"` components is absent.
+
+Use `createNamedContainer` by default for all containers — there is no downside, and the DevTools clarity pays off immediately once your component tree grows beyond a handful of providers.
+
+### `composeProviders`
+
+As an application grows, it is common for many providers to wrap the same subtree. Three containers already requires three levels of JSX nesting; a real app with auth, theming, routing, snackbars, and feature flags can easily reach ten. This nesting is structural boilerplate — it adds indentation and diff noise without conveying any intent.
+
+`composeProviders(...providers)` collapses any number of provider components into a single wrapper. The order is outermost-first, reading left to right: `composeProviders(A, B, C)` is equivalent to `<A><B><C>{children}</C></B></A>`. The resulting component is assigned a `displayName` derived from its members, so DevTools shows the composition rather than hiding it.
+
+The constraint to keep in mind: `composeProviders` renders each provider with only `children` — no other props. It is the right tool for providers that are self-contained and initialise from module-level config or internal defaults (themes, routing, snackbars, analytics). For providers that need `initialState` derived from runtime data — for example, seeding a user container after an auth response — keep those in JSX where you can pass the prop directly. In practice, one or two dynamic providers in JSX alongside a single `AppProviders = composeProviders(...)` is the common pattern.
+
+### Type utilities
+
+**`ContainerValue<C>`** extracts the return type of a container's `useContainer` — the value your hook hands to consuming components. This lets you name and reuse that type across your codebase without importing or re-declaring the hook. It is the canonical way to derive types from a container while keeping its internals encapsulated.
+
+```ts
+type ProfileValue = ContainerValue<typeof ProfileContainer>;
+// -> { profile: Profile; setProfile: Dispatch<SetStateAction<Profile>> }
+```
+
+**`ContainerState<C>`** extracts the `initialState` prop type from a container's `Provider`. Useful when writing test helpers or factory functions that need to accept or pass `initialState` without reaching into the container's hook directly.
+
+```ts
+type ProfileInitialState = ContainerState<typeof ProfileContainer>;
+// -> Profile
+```
+
+**`TypedContainer<Value, State>`** is a structural interface describing the shape every container conforms to: a `Provider` component and a `useContainer` hook. Use it to type function parameters or variables that should accept any container without coupling to a specific one.
+
+```ts
+function wrapContainer<V>(container: TypedContainer<V>) { ... }
+```
+
+**`AnyProvider<P>`** types any React component that accepts `children` plus any additional props `P`. Useful when building utilities that work with arbitrary provider components, regardless of their own prop requirements.
+
 ## Tests
 
 The test suite uses [Vitest](https://vitest.dev/) with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) and [happy-dom](https://github.com/capricorn86/happy-dom) for the DOM environment. Compile-time type assertions are validated separately with `tsc`.
