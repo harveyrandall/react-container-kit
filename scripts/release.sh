@@ -13,10 +13,11 @@ echo "  latest tag      : $LATEST_TAG"
 echo ""
 
 if [ -n "${1:-}" ]; then
-  NEW_VERSION="$1"
+  NEW_VERSION="${1#v}"
 else
   printf "  new version: "
   read -r NEW_VERSION
+  NEW_VERSION="${NEW_VERSION#v}"
 fi
 
 echo ""
